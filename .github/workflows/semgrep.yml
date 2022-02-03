@@ -1,0 +1,20 @@
+on:
+  push:
+    branches: [ master ]
+    #paths:
+    #- .github/workflows/semgrep.yml
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  schedule:
+  - cron: '0 0 * * 0'
+name: Semgrep
+jobs:
+  semgrep:
+    name: Scan
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: returntocorp/semgrep-action@v1
+      with:
+        publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
