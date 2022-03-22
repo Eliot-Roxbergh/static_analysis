@@ -60,6 +60,7 @@ firefox localhost:8001
 ## Summary
 
 I would call this somewhat simple or straightforward code, so we cannot accept many false positives.
+Luckily with running clang-tidy + Semgrep + CodeQL none / very few false positives were found.
 
 ### GCC
 No warnings from GCC
@@ -86,11 +87,13 @@ Interesting that we get a narrowing conversion warning not caught by -Wconversio
 
 ### Semgrep
 
-Semgrep found quite a few warnings (31?)
+Semgrep gave 16 warnings, as I remember no false positives.
+
+(apparently you can't see the warnings for more than 1 month if you don't pay them 40$/month, oops. Can run it locally..)
 
 ### CodeQL
 
-CodeQL found three bugs:
+CodeQL found three bugs, none of which were discovered by clang-tidy (or vice-versa):
 
 ```
 Comparison of narrow type with wide type in loop condition
