@@ -90,13 +90,17 @@ Semgrep found quite a few warnings (31?)
 
 ### CodeQL
 
-CodeQL found two bugs:
+CodeQL found three bugs:
 
 ```
 Comparison of narrow type with wide type in loop condition
 [High]
-3/3.c:77
-3/3.c:43
+advent2021/3/3.c:77
+advent2021/3/3.c:43
+
+Likely overrunning write
+[Critical]
+positives.c:22
 ```
 
 Interesting that this was not discovered by GCC -Wsign-compare, or by clang-tidy.
