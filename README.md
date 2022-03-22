@@ -31,6 +31,15 @@ ctest -T memcheck
 
 Semgrep, CodeQL, and a few other tools (mainly clang-tidy) are run automatically on Github every commit.
 
+These might not be public, but anyway;
+
+https://semgrep.dev/orgs/eliot-roxbergh/findings
+
+https://github.com/Eliot-Roxbergh/static_analysis/security/code-scanning
+
+https://github.com/Eliot-Roxbergh/static_analysis/actions/workflows/cmake.yml
+
+
 #### Manually
 
 It's also possible to run clang-tidy locally via make, such as:
@@ -77,7 +86,7 @@ Interesting that we get a narrowing conversion warning not caught by -Wconversio
 
 ### Semgrep
 
-Semgrep found quite a few warnings (31?), see https://semgrep.dev/orgs/eliot-roxbergh/findings (I don't think this is public)
+Semgrep found quite a few warnings (31?)
 
 ### CodeQL
 
@@ -91,8 +100,6 @@ Comparison of narrow type with wide type in loop condition
 ```
 
 Interesting that this was not discovered by GCC -Wsign-compare, or by clang-tidy.
-
-(https://github.com/Eliot-Roxbergh/static_analysis/security/code-scanning, not sure if public)
 
 ## Extras
 
