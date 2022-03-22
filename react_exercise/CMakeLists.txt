@@ -10,4 +10,8 @@ project(react C)
 add_library(react SHARED react.c)
 add_library(react_alternative SHARED react_alternative.c)
 
+#Disabled these for now since the test code is on exercism.io
+#add_test(react react)
+#add_test(react_alternative react_alternative)
+
 include_directories(.)

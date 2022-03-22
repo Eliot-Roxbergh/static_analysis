@@ -11,6 +11,12 @@ add_executable(2.out read_input.c 2/2.c)
 add_executable(3.out read_input.c 3/3.c)
 add_executable(4.out read_input.c 4/4.c)
 
+#TODO disabled for now since binaries need to be installed (make install) and run from their directories
+#add_test(1.out 1.out)
+#add_test(2.out 2.out)
+#add_test(3.out 3.out)
+#add_test(4.out 4.out)
+
 #NOTE! A bit messy... the binaries need to be placed in their own directory as setup now
 #       This is accomplished by the below lines and the command: make install (cmake --build does not "install")
 #   (TODO how to do this with cmake instead of needing 'make install'?)
