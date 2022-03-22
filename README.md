@@ -91,3 +91,45 @@ Comparison of narrow type with wide type in loop condition
 ```
 
 Interesting that this was not discovered by GCC -Wsign-compare, or by clang-tidy.
+
+(https://github.com/Eliot-Roxbergh/static_analysis/security/code-scanning, not sure if public)
+
+## Extras
+
+### Additional Methods of Testing
+
+Not looked into here, but static analysis is not enough really.
+
+Ideally, we'd want to have unit tests, good code coverage, etc.
+Perhaps also mock certain functions to see how the program
+behaves for certain edge-cases.
+
+For dynamic analysis we also have fuzzy testing.
+
+Bonus: note also the different options to harden the binary itself (see https://github.com/Eliot-Roxbergh/examples/blob/master/c_programming/development_tips/gcc_flags.md)
+
+#### Unit Tests
+
+Google Test
+
+Criterion
+
+Check
+
+For CMake see also CTest, and CDash (e.g. to be used in conjunction with Google Test)
+
+#### Code Coverage
+
+gcov & lcov (included in GCC)
+
+#### Mocking
+
+gmock (Google Test)
+
+cmocka
+
+(could ofc also naively mock a function manually by using #defines or look at the dynamic linking)
+
+#### Fuzzy Testing
+
+AFL++
