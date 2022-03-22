@@ -49,19 +49,19 @@ jobs:
 
     - name: clang tests
       run: |
-        cmake -B ${{env.SRC_PATH}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=true -DTEST_CPPCHECK=false -DTEST_IWYU=false  ${{env.SRC_PATH}}
+        cmake -B ${{env.SRC_PATH}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=true -DTEST_CPPCHECK=false -DTEST_IWYU=false ${{env.SRC_PATH}}
         cmake --build ${{env.SRC_PATH}}/build --config ${{env.BUILD_TYPE}}
       if: always()
 
 
     - name: Cppcheck tests
       run: |
-        cmake -B ${{env.SRC_PATH}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=false -DTEST_CPPCHECK=true -DTEST_IWYU=false  ${{env.SRC_PATH}}
+        cmake -B ${{env.SRC_PATH}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=false -DTEST_CPPCHECK=true -DTEST_IWYU=false ${{env.SRC_PATH}}
         cmake --build ${{env.SRC_PATH}}/build --config ${{env.BUILD_TYPE}}
       if: always()
 
     - name: IWYU tests
       run: |
-        cmake -B ${{env.SRC_PATH}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=false -DTEST_CPPCHECK=false -DTEST_IWYU=true  ${{env.SRC_PATH}}
+        cmake -B ${{env.SRC_PATH}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=false -DTEST_CPPCHECK=false -DTEST_IWYU=true ${{env.SRC_PATH}}
         cmake --build ${{env.SRC_PATH}}/build --config ${{env.BUILD_TYPE}}
       if: always()
