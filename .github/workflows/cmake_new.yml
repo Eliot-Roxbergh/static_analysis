@@ -2,9 +2,9 @@ name: CMake_new
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   BUILD_TYPE: Debug
@@ -22,34 +22,29 @@ jobs:
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{github.workspace}}
 
     - name: Build
-      # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
   code_analysis:
     runs-on: ubuntu-latest
     continue-on-error: true
-    
+
     steps:
     - uses: actions/checkout@v2
 
     - run: sudo apt-get update -yq
-
     - run: sudo apt-get install -yq clang clang-tidy cppcheck iwyu
 
     - name: clang tests
       run: |
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=true -DTEST_CPPCHECK=false -DTEST_IWYU=false ${{github.workspace}}
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-      if: always()
 
     - name: Cppcheck tests
       run: |
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=false -DTEST_CPPCHECK=true -DTEST_IWYU=false ${{github.workspace}}
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-      if: always()
 
     - name: IWYU tests
       run: |
         cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=false -DTEST_CPPCHECK=false -DTEST_IWYU=true ${{github.workspace}}
         cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-      if: always()
