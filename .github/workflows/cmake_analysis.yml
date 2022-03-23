@@ -1,4 +1,4 @@
-name: CMake_new
+name: CMake_analysis
 
 on:
   push:
