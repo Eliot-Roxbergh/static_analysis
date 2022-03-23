@@ -9,6 +9,9 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Debug
+    - run: sudo apt-get update -yq
+
+    - run: sudo apt-get install -yq valgrind
 
 jobs:
   build:
@@ -19,6 +22,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - run: sudo apt-get update -yq
+
+    - run: sudo apt-get install -yq clang clang-tidy cppcheck iwyu
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
