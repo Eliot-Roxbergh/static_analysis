@@ -5,9 +5,8 @@
 cmake_minimum_required(VERSION 3.6)
 project(examples C)
 
-
-include(CTest)
 set(MEMORYCHECK_COMMAND_OPTIONS "--error-exitcode=1") #fail on leak
+include(CTest)
 
 set(C_STD gnu11)
 #set(CMAKE_C_COMPILER /usr/bin/gcc)
