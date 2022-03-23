@@ -165,12 +165,13 @@ CodeQL found three bugs, none of which were discovered by clang-tidy (or vice-ve
 Unique
   [High] advent2021/3/3.c:77 //Comparison of narrow type with wide type in loop condition
   [High] advent2021/3/3.c:43
+  //Interesting that this was not discovered by GCC -Wsign-compare, or by clang-tidy.
 
 Detected by other tools
   [Critical] positives.c:22 // Bug! Likely overrunning write
 ```
 
-Interesting that this was not discovered by GCC -Wsign-compare, or by clang-tidy.
+
 
 ## Extras
 
