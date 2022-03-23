@@ -10,12 +10,11 @@ include(CTest)
 
 set(C_STD gnu11)
 #set(CMAKE_C_COMPILER /usr/bin/gcc)
-#TODO we set debug (-g) here, should just use -DCMAKE_BUILD_TYPE=Debug instead .. or similar
 
 #-DCMAKE_BUILD_TYPE=Debug
 IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug build")
-    set(C_FLAGS_DEBUG    "-g -fasynchronous-unwind-tables -fexceptions")
+    set(C_FLAGS_DEBUG    "-g -fasynchronous-unwind-tables -fexceptions")  #-g is probably implied by debug?
     set(C_FLAGS_WARNINGS "-Wall -Wextra -pedantic -Werror -Wformat=2  -Wconversion")
 #-DCMAKE_BUILD_TYPE=Release
 ELSE()
