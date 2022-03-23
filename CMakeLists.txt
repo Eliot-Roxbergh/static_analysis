@@ -7,6 +7,7 @@ project(examples C)
 
 
 include(CTest)
+set(MEMORYCHECK_COMMAND_OPTIONS "--error-exitcode=1") #fail on leak
 
 set(C_STD gnu11)
 #set(CMAKE_C_COMPILER /usr/bin/gcc)
