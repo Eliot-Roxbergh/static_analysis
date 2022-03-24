@@ -141,15 +141,16 @@ add_custom_target(
 # Extra, option to use clang (et al) front-end, CodeChecker
 # Use clang-7, clang-tidy-7 or later
 # pip3 install --user codechecker
+# (If "codechecker" not found try "CodeChecker")
 add_custom_target(
     codechecker_build
-    COMMAND CodeChecker log --build "make";
+    COMMAND codechecker log --build "make";
     --output "./compile_commands.json";
 )
 add_custom_target(
   codechecker_analyze
   DEPENDS codechecker_build
-  COMMAND CodeChecker analyze "compile_commands.json" -o reports;
+  COMMAND codechecker analyze "compile_commands.json" -o reports;
   --enable sensitive;
   --clean;
   #--ctu;
@@ -158,10 +159,10 @@ add_custom_target(
 add_custom_target(
   codechecker
   DEPENDS codechecker_analyze
-  COMMAND CodeChecker parse ./reports;
+  COMMAND codechecker parse ./reports;
 )
 add_custom_target(
   codechecker-html
   DEPENDS codechecker_analyze
-  COMMAND CodeChecker parse ./reports -e html -o ./reports_html
+  COMMAND codechecker parse ./reports -e html -o ./reports_html
 )
