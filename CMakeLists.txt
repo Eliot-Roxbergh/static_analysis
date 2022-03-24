@@ -142,7 +142,13 @@ add_custom_target(
 # Use clang-7, clang-tidy-7 or later
 # pip3 install --user codechecker
 add_custom_target(
+    codechecker_build
+    COMMAND CodeChecker log --build "make";
+    --output "./compile_commands.json";
+)
+add_custom_target(
   codechecker_analyze
+  DEPENDS codechecker_build
   COMMAND CodeChecker analyze "compile_commands.json" -o reports;
   --enable sensitive;
   --clean;
