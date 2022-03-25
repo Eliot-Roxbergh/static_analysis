@@ -6,6 +6,8 @@ They all work but have different bugs, which hopefully are detected by the suppo
 
 Let's see.
 
+NOTE: positives.c and ptrs.c contain some errors / memory leaks I wilfully introduced.
+
 
 ## Run tests
 
@@ -42,10 +44,16 @@ https://github.com/Eliot-Roxbergh/static_analysis/actions/workflows/cmake.yml
 
 #### Manually
 
-It's also possible to run clang-tidy locally via make, such as:
+It is also possible to run clang-tidy locally (as opposed to in the CI pipeline)
 
 ```
 make codechecker-html
+```
+or
+```
+make clean
+CodeChecker log --build "make" --output ./compile_commands.json
+CodeChecker analyze ./compile_commands.json --enable sensitive --ctu --clean --output ./reports
 ```
 
 And for interactive view:
@@ -53,7 +61,7 @@ And for interactive view:
 ```
 CodeChecker server &
 CodeChecker store ./reports -n my-project
-firefox localhost:8001
+firefox localhost:8001 &
 ```
 
 
@@ -90,6 +98,11 @@ So running fewer tools we would not have found all these faults, what are we mis
 #### clang-tidy/clang-sa (CodeChecker)
 CodeChecker reports many useful errors (memory errors and other important problems), but some false positives.
 As we use its sensitive setting, we get a few extra LOW and MEDIUM warnings (can be tweaked a lot).
+
+I was suprised to see that it did not complain of cert-err33-c, i.e. we do not check the return values of snprintf (et al.). Perhaps I have a too old version, as I've seen this warning in other situations. I think this is a warning which we could try to enable in the future...
+
+CodeChecker 6.19.1 
+clang(-tidy) 7.0.0
 
 ```
 -----------------------------------------------------------------------
@@ -149,6 +162,7 @@ good input that other tools largely ignored.
 
 For instance, a bit silly to always complain on the use of strlen or memcpy, but still might be a good idea to use the safer strlen_s and memcpy_s.
 
+(ran online via this Github CI pipeline, 2022-03-22)
 
 ```
 Unique
@@ -189,7 +203,7 @@ Detected by other tools
   [Critical] positives.c:22 // Bug! Likely overrunning write
 ```
 
-
+(ran online via this Github CI pipeline, 2022-03-22)
 
 ## Extras
 
