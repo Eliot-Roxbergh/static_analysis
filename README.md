@@ -244,3 +244,16 @@ cmocka
 #### Fuzzy Testing
 
 AFL++
+
+
+## TODO
+
+Q: How can (if) these bugs be exploited in the wild?
+
+Q: Fix the bugs
+
+Q: How long to filter out false positives? etc.
+
+Bonus Q: Can we integrate all useful tools into one build flow? E.g. CodeChecker (clang-tidy, cppcheck, infer, (sparse)) + Semgrep looks quite powerful. But no CI right now, thats beyond our scope.
+
+(didn't mention code-format and other things semi relevant)
