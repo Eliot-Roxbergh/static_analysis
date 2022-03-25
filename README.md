@@ -60,7 +60,15 @@ firefox localhost:8001
 ## Summary
 
 I would call this somewhat simple or straightforward code, so we cannot accept many false positives.
-Luckily with running clang-tidy + Semgrep + CodeQL none / very few false positives were found.
+Still a few FPs were reported from running clang-tidy + Semgrep + CodeQL.
+
+19 (11+8) FPs, 16 (12+2+2) TPs, in addition to 6 duplicate TPs.
+
+Note that many of the FPs were of the same type and easily ignored (Semgrep) or (mainly for for clang-tidy)
+some were reasonable complaints that is not a problem in the specific context / already checked indirectly later ...
+and thus the critique to check them directly or more clearly could very well be valid.
+
+This also highlights that these static code analysis tools should be present from the start of development, to force a better code pattern (or a pattern more in line with the tool..?) thoughout.
 
 ### GCC
 No warnings from GCC
@@ -80,8 +88,8 @@ It is a bit scary that each of the three tools gave different warnings, with ver
 So running fewer tools we would not have found all these faults, what are we missing that we could find with other tools?
 
 #### clang-tidy/clang-sa (CodeChecker)
-CodeChecker reports a few useful errors, no real false positives.
-Although we get some less important warnings as we use --enable sensitive.
+CodeChecker reports many useful errors (memory errors and other important problems), but some false positives.
+As we use its sensitive setting, we get a few extra LOW and MEDIUM warnings (can be tweaked a lot).
 
 ```
 -----------------------------------------------------------------------
@@ -135,6 +143,7 @@ Interesting that we get a narrowing conversion warning not caught by -Wconversio
 
 Semgrep gave 16 warnings, with many false positives (a bit gray area).
 Semgrep seems very basic, atleast with the relatively few default rulesets for C.
+However, as I understand the benefit with Semgrep is the ease of writing new rules.
 So far it has only complained on the use of unsafe standard functions, some are FPs or not a big deal, but still
 good input that other tools largely ignored.
 
@@ -173,6 +182,7 @@ CodeQL found three bugs, none of which were discovered by clang-tidy (or vice-ve
 Unique
   [High] advent2021/3/3.c:77 //Comparison of narrow type with wide type in loop condition
   [High] advent2021/3/3.c:43
+  //afaik comparison is usually ok but in certain loop expressions there's the possibility of infinite loop (even if the smaller variable is promoted).
   //Interesting that this was not discovered by GCC -Wsign-compare, or by clang-tidy.
 
 Detected by other tools
