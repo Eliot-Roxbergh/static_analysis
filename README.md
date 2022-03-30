@@ -1,13 +1,32 @@
 # Static Analysis Example
 
-Some quick code I wrote, mainly solution to different code exercises.
+This is a small demo analyzing C code, in particular static analysis.
+The code in question involve a dozen or so smaller C files which I wrote, test files or solution to different code exercises.
 
-They all work but have different bugs, which hopefully are detected by the supported static analysis tools.
+These small programs all "work" but according to static analysis tools they have many bugs (some I wilfully introduced).
+It is interesting to see that even with many GCC warnings enabled (CMakeLists.txt) no warnings were reported,
+and except for two memory errors I introduced (positives.c and ptrs.c), valgrind has no complaints.
 
-Let's see.
+The code was compiled with GCC 8.4.0 and relevant flags include: _"-Wall -Wextra -pedantic -Werror -Wformat=2  -Wconversion -Wdouble-promotion -O0 -g"_
 
-NOTE: positives.c and ptrs.c contain some errors / memory leaks I wilfully introduced.
+Results from analysis below, also summarized in c\_testing\_slides.pdf.
 
+__Addendum:__ More GCC flags which we could've added (would have detected some additional bugs): _"-Wshadow -Wundef -Og"_
+
+## Software Used
+
+```
+clang-7 / clang-tidy-7
+GCC 8.4.0
+Valgrind 3.13.0
+Semgrep and CodeQL via CI pipeline (2022-03-22):
+    Semgrep 0.86.5  (/w all C specific rules, about 85)
+    CodeQL 2.8.1 (../CodeQL/0.0.0-20220214/..)
+(Ubuntu 18.04)
+```
+
+Note that newer versions of the compiler and the static analysis tools will likely detect even more warnings
+(clang-7 is fairly old).
 
 ## Run tests
 
@@ -101,9 +120,6 @@ As we use its sensitive setting, we get a few extra LOW and MEDIUM warnings (can
 
 I was suprised to see that it did not complain of cert-err33-c, i.e. we do not check the return values of snprintf (et al.). Perhaps I have a too old version, as I've seen this warning in other situations. I think this is a warning which we could try to enable in the future...
 
-CodeChecker 6.19.1 
-clang(-tidy) 7.0.0
-
 ```
 -----------------------------------------------------------------------
 Checker name                             | Severity | Number of reports  : True Positives (my approximation)
@@ -150,6 +166,9 @@ Detected by other tools (semgrep)
   [LOW]  read_input.c:217   [cert-err34-c]                   TP, 'fscanf' (3/3)
 ```
 
+_CodeChecker 6.19.1, clang(-tidy) 7.0.0_
+
+
 Interesting that we get a narrowing conversion warning not caught by -Wconversion, maybe enums is a special case?
 
 #### Semgrep
@@ -162,7 +181,6 @@ good input that other tools largely ignored.
 
 For instance, a bit silly to always complain on the use of strlen or memcpy, but still might be a good idea to use the safer strlen_s and memcpy_s.
 
-(ran online via this Github CI pipeline, 2022-03-22)
 
 ```
 Unique
@@ -186,6 +204,8 @@ Detected by other tools
   [HIGH]  read_input.c:217  vswscanf-1 // ^
 ```
 
+_(ran online via this Github CI pipeline, 2022-03-22)_
+
 (apparently you can't see the warnings for more than 1 month if you don't pay them 40$/month, oops. Can run it locally though..)
 
 #### CodeQL
@@ -203,7 +223,7 @@ Detected by other tools
   [Critical] positives.c:22 // Bug! Likely overrunning write
 ```
 
-(ran online via this Github CI pipeline, 2022-03-22)
+_(ran online via this Github CI pipeline, 2022-03-22)_
 
 ## Extras
 
@@ -214,6 +234,10 @@ Not looked into here, but static analysis is not enough really.
 Ideally, we'd want to have unit tests, good code coverage, etc.
 Perhaps also mock certain functions to see how the program
 behaves for certain edge-cases.
+
+Additionally, with black-box testing such as memory check with Valgrind we also want to have better code coverage.
+Valgrind only checks the program under test, so it is possible that memory leaks are missed if that path is not taken
+and additionally we do not currently test the library in _react_exercise_ for this reason.
 
 For dynamic analysis we also have fuzzy testing.
 

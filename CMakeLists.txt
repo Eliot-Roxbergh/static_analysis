@@ -9,22 +9,25 @@ set(MEMORYCHECK_COMMAND_OPTIONS "--error-exitcode=1") #fail on leak
 include(CTest)
 
 set(C_STD gnu11)
-#set(CMAKE_C_COMPILER /usr/bin/gcc)
-
 #-DCMAKE_BUILD_TYPE=Debug
 IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug build")
-    set(C_FLAGS_DEBUG    "-g -fasynchronous-unwind-tables -fexceptions")  #-g is probably implied by debug?
-    set(C_FLAGS_WARNINGS "-Wall -Wextra -pedantic -Werror -Wformat=2  -Wconversion")
+    set(C_FLAGS_DEBUG    " -O0 -g -fasynchronous-unwind-tables -fexceptions ")
+    set(C_FLAGS_WARNINGS " -Wall -Wextra -pedantic -Werror -Wformat=2  -Wconversion -Wdouble-promotion ")
+    #More flags to try (these report some new warnings): "-Wshadow -Wundef -Og"
 #-DCMAKE_BUILD_TYPE=Release
 ELSE()
     message("Release build")
-    set(C_FLAGS_SECURITY "-D_FORTIFY_SOURCE=2  -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs")
-    #set(C_FLAGS_SECURITY_EXEC "-fpie -Wl,-pie")
-    #set(C_FLAGS_SECURITY_LIB  "-fpic")
+    set(C_FLAGS_DEBUG    " -O3 ")
+    set(C_FLAGS_SECURITY " -D_FORTIFY_SOURCE=2  -D_GLIBCXX_ASSERTIONS -fstack-protector-strong \
+                           -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs \
+                           ") #-fcf-protection=full -fstack-clash-protection
+    #set(C_FLAGS_SECURITY_EXEC " -fpie -Wl,-pie ")
+    #set(C_FLAGS_SECURITY_LIB  " -fpic ")
 ENDIF()
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=${C_STD} ${C_FLAGS_DEBUG} ${C_FLAGS_WARNINGS} ${C_FLAGS_SECURITY}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=${C_STD} ${C_FLAGS_DEBUG} ${C_FLAGS_WARNINGS} ${C_FLAGS_SECURITY} -fno-common")
+#set(CMAKE_C_COMPILER /usr/bin/gcc)
 
 add_executable(array         array.c)
 add_executable(bit_manip     bit_manip.c)
@@ -81,7 +84,7 @@ if (TEST_CPPCHECK)
         --force;
         --inline-suppr;
         --std=${C_STD};
-        #"--suppressions-list=${CMAKE_SOURCE_DIR}/CppCheckSuppressions.txt";
+        #"--suppressions-list=${CMAKE_SOURCE_DIR}/CppCheckSuppressions.txt" ;
        )
 endif()
 if (TEST_IWYU)
@@ -134,8 +137,9 @@ add_custom_target(
 #TODO infer also looks like an interesting analyzer
 #TODO most these tools are supported in CodeChecker, easier to get an overview with that front-end
 #       https://github.com/facebook/infer
-#CodeQL and Semgrep are run via CI so not added here.
 
+
+#CodeQL and Semgrep are run via CI so not added here.
 
 
 # Extra, option to use clang (et al) front-end, CodeChecker
@@ -144,8 +148,8 @@ add_custom_target(
 # (If "codechecker" not found try "CodeChecker")
 add_custom_target(
     codechecker_build
-    COMMAND codechecker log --build "make";
-    --output "./compile_commands.json";
+    COMMAND codechecker log --build "make" ;
+    --output "./compile_commands.json" ;
 )
 add_custom_target(
   codechecker_analyze
@@ -166,3 +170,4 @@ add_custom_target(
   DEPENDS codechecker_analyze
   COMMAND codechecker parse ./reports -e html -o ./reports_html
 )
+
