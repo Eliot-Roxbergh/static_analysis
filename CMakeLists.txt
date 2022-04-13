@@ -13,8 +13,11 @@ set(C_STD gnu11)
 IF(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug build")
     set(C_FLAGS_DEBUG    " -O0 -g -fasynchronous-unwind-tables -fexceptions ")
-    set(C_FLAGS_WARNINGS " -Wall -Wextra -pedantic -Werror -Wformat=2  -Wconversion -Wdouble-promotion ")
-    #More flags to try (these report some new warnings): "-Wshadow -Wundef -Og"
+    set(C_FLAGS_WARNINGS " -Wall -Wextra -pedantic -Werror -Wformat=2  -Wconversion -Wdouble-promotion \
+                           -Wcast-align -Wredundant-decls -Winline -Wdisabled-optimization -Wnested-externs ")
+    #More flags to try (these report some new warnings!): -Og -Wshadow -Wundef -Wcast-qual
+    #                                    and some extras: -Wmissing-prototypes -Wmissing-declarations
+
 #-DCMAKE_BUILD_TYPE=Release
 ELSE()
     message("Release build")
