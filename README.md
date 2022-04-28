@@ -11,7 +11,47 @@ The code was compiled with GCC 8.4.0 and relevant flags include: _"-Wall -Wextra
 
 Results from analysis below, also summarized in c\_testing\_slides.pdf.
 
-__Addendum:__ More GCC flags which we could've added (would have detected some additional bugs): _"-Wshadow -Wundef -Og"_
+
+### Addendum
+More GCC flags which we could have added (would have detected some additional bugs): _"-Wshadow -Wundef -Og"_,
+additionally, GCC can provide runtime checks with e.g. _"-fsanitize=undefined"_[1] (not sure how this compares to the Valgrind suite).
+
+I can also add that Cppcheck looks somewhat useful and found _one_ bug not discovered by any of the other tools. (Cppcheck is FOSS)
+Cppcheck was not evaluated below, so I provide a very brief summary here,
+
+```
+Unique bug found:
+ [array.c:30]: (warning, inconclusive) Array 'my_apa' is filled incompletely. Did you forget to multiply the size given to 'memcpy()' with 'sizeof(*my_apa)'?
+
+Otherwise Cppcheck gave mostly "style" advice, such as
+ (style) The scope of the variable 'X' can be reduced
+ (style) Variable 'X' is reassigned a value before the old one has been used.
+ (style) The scope of the variable 'X' can be reduced
+ (style) Condition 'X>Y' is always true
+ (style) Parameter 'X' can be declared with const
+ (style) Function 'X' argument 2 names different: declaration 'input' definition 'user_input'.
+These were generally not found with CodeChecker (clang-tidy) (or the other tools tested), even with sensitivity=extreme
+
+Or in other cases I have seen it useful to detect incorrect checks or assumptions, such as this one warning (in another codebase):
+ Assuming that condition 'ptr != NULL' is not redundant
+ Null pointer dereference [on a few lines earlier]
+
+Cppcheck 1.82
+Example (if included cmake file doesn't work): cppcheck . --enable=all --inconclusive
+```
+
+SonarCloud (SonarQube) is another tool not evaluated here, which detected some interesting stuff when tested on another code base.
+(It is proprietary but free to use for open-source software, https://sonarcloud.io/)
+
+There seems to be a never ending list of static analysis tools (especially if we include proprietary and/or expensive products),
+the ones briefly tested most often only add one or two interesting unique warnings... the question is when to stop.
+So far these five tools (clang-tidy, semgrep, codeql, cppcheck, sonar) seem reasonable, although potential overhead with
+duplicates and FPs is concerning. Only choosing one, the tool of choice would be clang-tidy (CodeChecker) based on evaluation below.
+
+
+[1] - https://blogs.oracle.com/linux/post/improving-application-security-with-undefinedbehaviorsanitizer-ubsan-and-gcc,
+https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
+
 
 ## Software Used
 

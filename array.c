@@ -27,7 +27,7 @@ void func(int (*apa)[3], unsigned int len)
 {
     int my_apa[3];
     // my_apa = apa[1]; //not ok (there's no assignment operator for arrays)
-    memcpy(my_apa, apa[0], 3);  // copy data of first array
+    memcpy(my_apa, apa[0], 3);  // copy data of first array // NOTE! should be 3*sizeof(*apa) not 3
 
     int *my_apap = apa[0];  // point to first array of (3) ints
 
