@@ -1,5 +1,7 @@
 # Static Analysis Example
 
+_**For a quick example of a C project with static analysis setup see:** https://github.com/Eliot-Roxbergh/task_portknocker_
+
 This is a small demo analyzing C code, in particular static analysis.
 The code in question involve a dozen or so smaller C files which I wrote, test files or solution to different code exercises.
 
