@@ -18,7 +18,10 @@ Results from analysis below, also summarized in c\_testing\_slides.pdf.
 More GCC flags which we could have added (would have detected some additional bugs): _"-Wshadow -Wundef -Og"_,
 additionally, GCC can provide runtime checks with e.g. _"-fsanitize=undefined"_[1] (not sure how this compares to the Valgrind suite).
 
-I can also add that Cppcheck looks somewhat useful and found _one_ bug not discovered by any of the other tools. (Cppcheck is FOSS)
+On later releases GCC (>=10) also provides some static analysis functionality with **_"-fanalyzer"_** [2]. On this code base, GCC (12.1.0) -fanalyzer finds only two issues, namely the double frees in _positives.c_. No FPs. 
+
+
+I can also add that **Cppcheck** looks somewhat useful and found _one_ bug not discovered by any of the other tools. (Cppcheck is FOSS)
 Cppcheck was not evaluated below, so I provide a very brief summary here,
 
 ```
@@ -42,7 +45,7 @@ Cppcheck 1.82
 Example (if included cmake file doesn't work): cppcheck . --enable=all --inconclusive
 ```
 
-SonarCloud (SonarQube) is another tool not evaluated here, which detected some interesting stuff when tested on another code base.
+SonarCloud (**SonarQube**) is another tool not evaluated here, which detected some interesting stuff when tested on another code base (similar to CodeQL few hits, but also very few FP -> that's usable).
 (It is proprietary but free to use for open-source software, https://sonarcloud.io/)
 
 There seems to be a never ending list of static analysis tools (especially if we include proprietary and/or expensive products),
@@ -52,7 +55,8 @@ duplicates and FPs is concerning. Only choosing one, the tool of choice would be
 
 
 [1] - https://blogs.oracle.com/linux/post/improving-application-security-with-undefinedbehaviorsanitizer-ubsan-and-gcc,
-https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
+https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html \
+[2] - https://gcc.gnu.org/onlinedocs/gcc/Static-Analyzer-Options.html#index-fanalyzer, https://developers.redhat.com/articles/2022/04/12/state-static-analysis-gcc-12-compiler
 
 
 ## Software Used
