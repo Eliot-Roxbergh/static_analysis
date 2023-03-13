@@ -53,6 +53,7 @@ the ones briefly tested most often only add one or two interesting unique warnin
 So far these five tools (clang-tidy, semgrep, codeql, cppcheck, sonar) seem reasonable, although potential overhead with
 duplicates and FPs is concerning. Only choosing one, the tool of choice would be clang-tidy (CodeChecker) based on evaluation below.
 
+Additional SAST tools were not tested, but are worth to mention, **flawfinder, infer, frama-c** (and also **splint** but is only useful if coded with their style in mind?). TODO: Codechecker supports e.g. infer, cppcheck, and clang-tidy - can we combine these to one workflow? TODO: flawfinder and frama-c seem to be the next candidates to try based on "my gut feeling" and "the word on the street".
 
 [1] - https://blogs.oracle.com/linux/post/improving-application-security-with-undefinedbehaviorsanitizer-ubsan-and-gcc,
 https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html \
@@ -325,5 +326,7 @@ Q: Fix the bugs
 Q: How long to filter out false positives? etc.
 
 Bonus Q: Can we integrate all useful tools into one build flow? E.g. CodeChecker (clang-tidy, cppcheck, infer, (sparse)) + Semgrep looks quite powerful. But no CI right now, thats beyond our scope.
+
+Bonus: Try flawfinder and frama-c (or whatever seems promising)
 
 (didn't mention code-format and other things semi relevant)
